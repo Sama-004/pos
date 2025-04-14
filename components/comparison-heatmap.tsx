@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { Person } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import { getInitials } from "@/lib/name-initials";
 
 type Skill = {
@@ -45,7 +44,7 @@ export function CandidateComparisonHeatmap({
   candidates,
 }: CandidateComparisonHeatmapProps) {
   // Mock function to generate skill level data (1-5) for each candidate and skill
-  const getSkillLevel = (candidateId: string, skillName: string): number => {
+  const getSkillLevel = (): number => {
     // In a real app, this would come from your API
     return Math.floor(Math.random() * 5) + 1;
   };
@@ -93,7 +92,7 @@ export function CandidateComparisonHeatmap({
               <tr key={skill.name} className="border-t border-gray-100">
                 <td className="p-2 text-sm">{skill.name}</td>
                 {candidates.map((candidate) => {
-                  const skillLevel = getSkillLevel(candidate.id, skill.name);
+                  const skillLevel = getSkillLevel();
                   return (
                     <td key={`${candidate.id}-${skill.name}`} className="p-2">
                       <div
