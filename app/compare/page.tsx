@@ -5,6 +5,7 @@ import useSWR from "swr";
 import { Person } from "@/lib/types";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { CandidatesSidebar } from "@/components/candidate-sidebar";
+import { JobHeader } from "@/components/job-header";
 
 export default function Page() {
   const { data, error, isLoading } = useSWR<Person[]>(
@@ -27,7 +28,9 @@ export default function Page() {
           recommendedCandidates={firstFourPeople}
           otherCandidates={otherCandidates}
         />
-        <main className="flex-1 p-6"></main>
+        <main className="flex-1 p-6">
+          <JobHeader candidateCount={firstFourPeople.length} />
+        </main>
       </SidebarProvider>
     </div>
   );
