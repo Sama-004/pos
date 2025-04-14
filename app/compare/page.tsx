@@ -10,7 +10,6 @@ import { CandidateComparisonHeatmap } from "@/components/comparison-heatmap";
 import { useEffect, useState } from "react";
 
 const recommendedCount = 4;
-const otherCount = 4;
 
 export default function Page() {
   const { data, error, isLoading } = useSWR<Person[]>(
@@ -26,11 +25,27 @@ export default function Page() {
   useEffect(() => {
     if (data) {
       setRecommendedCandidates(data.slice(0, recommendedCount));
-      setOtherCandidates(
-        data.slice(recommendedCount, recommendedCount + otherCount),
-      );
+      setOtherCandidates(data.slice(recommendedCount, data.length));
     }
   }, [data]);
+
+  const moveCandidateToRecommended = (candidate: Person) => {
+    setOtherCandidates((prevOthers) =>
+      prevOthers.filter((c) => c.id !== candidate.id),
+    );
+    setRecommendedCandidates((prevRecommended) => [
+      ...prevRecommended,
+      candidate,
+    ]);
+  };
+
+  const removeCandidateFromRecommended = (candidate: Person) => {
+    setRecommendedCandidates((prevRecommended) =>
+      prevRecommended.filter((c) => c.id !== candidate.id),
+    );
+
+    setOtherCandidates((prevOthers) => [...prevOthers, candidate]);
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
@@ -42,6 +57,8 @@ export default function Page() {
         <CandidatesSidebar
           recommendedCandidates={recommendedCandidates}
           otherCandidates={otherCandidates}
+          onAddCandidateAction={moveCandidateToRecommended}
+          onRemoveCandidateAction={removeCandidateFromRecommended}
         />
         <main className="flex-1 p-6">
           <JobHeader candidateCount={recommendedCandidates.length} />

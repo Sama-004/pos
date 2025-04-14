@@ -1,5 +1,5 @@
 "use client";
-import { Plus, User } from "lucide-react";
+import { Minus, Plus, User } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -15,11 +15,15 @@ import { Person } from "@/lib/types";
 interface CandidatesSidebarProps {
   recommendedCandidates: Person[];
   otherCandidates: Person[];
+  onAddCandidateAction: (candidate: Person) => void;
+  onRemoveCandidateAction: (candidate: Person) => void;
 }
 
 export function CandidatesSidebar({
   recommendedCandidates,
   otherCandidates,
+  onAddCandidateAction,
+  onRemoveCandidateAction,
 }: CandidatesSidebarProps) {
   return (
     <Sidebar className="w-[280px] border-r">
@@ -32,15 +36,26 @@ export function CandidatesSidebar({
             {recommendedCandidates.map((candidate) => (
               <div
                 key={candidate.id}
-                className="flex items-center gap-3 px-4 py-3 text-muted-foreground"
+                className="flex items-center justify-between px-4 py-3 text-muted-foreground"
               >
-                <Avatar className="h-6 w-6">
-                  <AvatarImage alt={candidate.name} />
-                  <AvatarFallback>
-                    <User className="h-4 w-4" />
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm">{candidate.name}</span>
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-6 w-6">
+                    <AvatarImage alt={candidate.name} />
+                    <AvatarFallback>
+                      <User className="h-4 w-4" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm">{candidate.name}</span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6 rounded-full"
+                  onClick={() => onRemoveCandidateAction(candidate)}
+                >
+                  <Minus className="h-4 w-4 text-red-600" />
+                  <span className="sr-only">Add candidate</span>
+                </Button>
               </div>
             ))}
           </SidebarGroupContent>
@@ -72,6 +87,7 @@ export function CandidatesSidebar({
                   variant="ghost"
                   size="icon"
                   className="h-6 w-6 rounded-full"
+                  onClick={() => onAddCandidateAction(candidate)}
                 >
                   <Plus className="h-4 w-4" />
                   <span className="sr-only">Add candidate</span>
